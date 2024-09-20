@@ -1,48 +1,125 @@
-import React, { useState, useEffect } from "react";
-import getState from "./flux.js";
+import React, { useState, useEffect, createContext } from "react";
 
-// Don't change, here is where we initialize our context, by default it's just going to be null.
-export const Context = React.createContext(null);
+export const Context = createContext({});
 
-// This function injects the global store to any view/component where you want to use it, we will inject the context to layout.js, you can see it here:
-// https://github.com/4GeeksAcademy/react-hello-webapp/blob/master/src/js/layout.js#L35
-const injectContext = PassedComponent => {
-	const StoreWrapper = props => {
-		//this will be passed as the contenxt value
-		const [state, setState] = useState(
-			getState({
-				getStore: () => state.store,
-				getActions: () => state.actions,
-				setStore: updatedStore =>
-					setState({
-						store: Object.assign(state.store, updatedStore),
-						actions: { ...state.actions }
-					})
-			})
-		);
+const InjectContext = ({ children }) => {
+  const [state, setState] = useState({
+    films: [],
+    people: [],
+    planets: [],
+    species: [],
+    starships: [],
+    vehicles: [],
+    favorites: []
+  });
 
-		useEffect(() => {
-			/**
-			 * EDIT THIS!
-			 * This function is the equivalent to "window.onLoad", it only runs once on the entire application lifetime
-			 * you should do your ajax requests or fetch api requests here. Do not use setState() to save data in the
-			 * store, instead use actions, like this:
-			 *
-			 * state.actions.loadSomeData(); <---- calling this function from the flux.js actions
-			 *
-			 **/
-		}, []);
+  const actions = {
+    getPeople: async () => {
+      try {
+        const response = await fetch(`https://www.swapi.tech/api/people`);
+        const data = await response.json();
+        setState((prevState) => ({
+          ...prevState,
+          people: data.results,
+        }));
+      } catch (error) {
+        console.error("Error al obtener los personajes:", error);
+      }
+    },
 
-		// The initial value for the context is not null anymore, but the current state of this component,
-		// the context will now have a getStore, getActions and setStore functions available, because they were declared
-		// on the state of this component
-		return (
-			<Context.Provider value={state}>
-				<PassedComponent {...props} />
-			</Context.Provider>
-		);
-	};
-	return StoreWrapper;
+    getPlanets: async () => {
+      try {
+        const response = await fetch(`https://www.swapi.tech/api/planets`);
+        const data = await response.json();
+        setState((prevState) => ({
+          ...prevState,
+          planets: data.results,
+        }));
+      } catch (error) {
+        console.error("Error al obtener los planetas:", error);
+      }
+    },
+
+    getStarships: async () => {
+      try {
+        const response = await fetch(`https://www.swapi.tech/api/starships`);
+        const data = await response.json();
+        setState((prevState) => ({
+          ...prevState,
+          starships: data.results,
+        }));
+      } catch (error) {
+        console.error("Error al obtener las naves:", error);
+      }
+    },
+
+    getVehicles: async () => {
+      try {
+        const response = await fetch(`https://www.swapi.tech/api/vehicles`);
+        const data = await response.json();
+        setState((prevState) => ({
+          ...prevState,
+          vehicles: data.results,
+        }));
+      } catch (error) {
+        console.error("Error al obtener los vehículos:", error);
+      }
+    },
+
+    getFilms: async () => {
+      try {
+        const response = await fetch(`https://www.swapi.tech/api/films`);
+        const data = await response.json();
+        setState((prevState) => ({
+          ...prevState,
+          films: data.result,
+        }));
+      } catch (error) {
+        console.error("Error al obtener las películas:", error);
+      }
+    },
+
+    getSpecies: async () => {
+      try {
+        const response = await fetch(`https://www.swapi.tech/api/species`);
+        const data = await response.json();
+        setState((prevState) => ({
+          ...prevState,
+          species: data.results,
+        }));
+      } catch (error) {
+        console.error("Error al obtener las especies:", error);
+      }
+    },
+    addFavorite: (item) => {
+      setState((prevState) => ({
+        ...prevState,
+        favorites: [...prevState.favorites, item],
+      }));
+    },
+
+    removeFavorite: (item) => {
+      setState((prevState) => ({
+        ...prevState,
+        favorites: prevState.favorites.filter(fav => fav.uid !== item.uid),
+      }));
+    },
+  };
+
+  useEffect(() => {
+    actions.getPeople();
+    actions.getPlanets();
+    actions.getStarships();
+    actions.getVehicles();
+    actions.getFilms();
+    actions.getSpecies();
+  }, []);
+
+  return (
+    <Context.Provider value={{ store: state, actions }}>
+      {children}
+    </Context.Provider>
+  );
 };
 
-export default injectContext;
+export default InjectContext;

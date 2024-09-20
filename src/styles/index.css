@@ -1,3 +1,25 @@
-/* 
-    General Styles
-*/
+.carousel-img {
+    height: 500px; 
+    object-fit: cover; 
+  }
+
+  .footer {
+    background-color: #000; 
+    color: #fff;
+  }
+  
+  .footer a {
+    color: #f0c14b; 
+    text-decoration: none;
+  }
+  
+  .footer a:hover {
+    color: #ffe81f; 
+  }
+  
+  .footer i {
+    font-size: 1.5rem;
+  }
+  
+  
+  
