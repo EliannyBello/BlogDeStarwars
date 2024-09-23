@@ -4,7 +4,7 @@ import { Home } from "./views/home.js";
 import { Single } from "./views/single.js";
 import { Navbar } from "./component/navbar.js";
 import { Footer } from "./component/footer.js";
-import {card} from "./component/card.js";
+import { Carrusel } from "./component/carrusel.js";
 
 //create your first component
 const Layout = () => {
@@ -15,12 +15,13 @@ const Layout = () => {
 	return (
 		<div>
 			<BrowserRouter basename={basename}>
-					<Navbar />
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/single/:type/:id" element={<Single />} />
-					</Routes>
-					<Footer />
+				<Navbar />
+				<Carrusel />
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/detail/:type/:id" element={<Single />} />
+				</Routes>
+				<Footer />
 			</BrowserRouter>
 		</div>
 	);

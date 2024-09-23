@@ -3,73 +3,47 @@ import img1 from "../../img/start2.jpeg";
 import img2 from "../../img/1starts.jpg.webp";
 import img3 from "../../img/starwars3.jpg";
 import { Context } from "../store/appContext";
+import { Link } from "react-router-dom";
+import { Home } from "../views/home";
+
 
 export const Navbar = () => {
-	const { store } = useContext(Context);
-	
+	const { store, actions} = useContext(Context);
+
 	return (
 		<>
-			<nav className="navbar bg-dark">
+			<nav className="navbar">
 				<div className="container-fluid">
-					<a className="navbar-brand">Star Wars</a>
-					<button className="btn btn-outline-success" type="button">
-						Favorites ({store.favorites.length})
-					</button>
+					<Link to={`/`}>
+					<img src={img2} alt="Descripción de la imagen" className="nav-img mx-3" />
+					</Link>
+					<div className="dropdown mx-3 px-5">
+						<button
+							className="btn-nav justify-content-center"
+							type="button"
+							id="favoritesDropdown"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						> Favorites ({store.favorites.length})
+						</button>
+						<ul className="dropdown-menu justify-content-between mx-3">
+							{store.favorites.length > 0 ? (
+								store.favorites.map((item, index) => (
+									<li className="dropdown-item" key={index}>
+										<Link to={`/detail/${item.type}/${item.uid}`}className="dropdown-item">
+											{item.name}
+										</Link><button className="btn-nav-x bg-danger m-2" onClick={() => actions.removeFavorite(item)}>
+										x
+										</button>
+									</li>
+								))
+							) : (
+								<li className="dropdown-item">No Favorites</li>
+							)}
+						</ul>
+					</div>
 				</div>
 			</nav>
-			<div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
-				<div className="carousel-indicators">
-					<button
-						type="button"
-						data-bs-target="#carouselExampleIndicators"
-						data-bs-slide-to="0"
-						className="active"
-						aria-current="true"
-						aria-label="Slide 1"
-					></button>
-					<button
-						type="button"
-						data-bs-target="#carouselExampleIndicators"
-						data-bs-slide-to="1"
-						aria-label="Slide 2"
-					></button>
-					<button
-						type="button"
-						data-bs-target="#carouselExampleIndicators"
-						data-bs-slide-to="2"
-						aria-label="Slide 3"
-					></button>
-				</div>
-				<div className="carousel-inner">
-					<div className="carousel-item active">
-						<img src={img1} className="d-block w-100 carousel-img" alt="Star Wars 1" />
-					</div>
-					<div className="carousel-item">
-						<img src={img2} className="d-block w-100 carousel-img" alt="Star Wars 2" />
-					</div>
-					<div className="carousel-item">
-						<img src={img3} className="d-block w-100 carousel-img" alt="Star Wars 3" />
-					</div>
-				</div>
-				<button
-					className="carousel-control-prev"
-					type="button"
-					data-bs-target="#carouselExampleIndicators"
-					data-bs-slide="prev"
-				>
-					<span className="carousel-control-prev-icon" aria-hidden="true"></span>
-					<span className="visually-hidden">Previous</span>
-				</button>
-				<button
-					className="carousel-control-next"
-					type="button"
-					data-bs-target="#carouselExampleIndicators"
-					data-bs-slide="next"
-				>
-					<span className="carousel-control-next-icon" aria-hidden="true"></span>
-					<span className="visually-hidden">Next</span>
-				</button>
-			</div>
 		</>
 	);
 }

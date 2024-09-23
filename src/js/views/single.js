@@ -3,36 +3,90 @@ import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 export const Single = () => {
-  const { type, id } = useParams();
-  const { store, actions } = useContext(Context);
+  const { type, id } = useParams();  
+  const { store, actions } = useContext(Context); 
 
   useEffect(() => {
-    if (type === "people") actions.getPeople(id);
-    else if (type === "planets") actions.getPlanets(id);
-    else if (type === "vehicles") actions.getVehicles(id);
-  }, [type, id]);
+    if (type === "people") actions.getPeople();
+    else if (type === "planets") actions.getPlanets();
+    else if (type === "vehicles") actions.getVehicles();
+    else if (type === "starships") actions.getStarships();
+    else if (type === "films") actions.getFilms();
+    else if (type === "species") actions.getSpecies();
+  }, [type, id, actions]); 
 
-  const entity = store[type]?.find((item) => item.uid === id) || {};
+  const entity = store[type]?.find((item) => item.uid === id) || null;
+
+  if (!entity || !entity.properties) {
+    return <div>Loading...</div>;
+  }
+
+  const properties = entity.properties || {};
+
+  const imageTypeMap = {
+    people: "characters",
+    starships: "starships",
+    vehicles: "vehicles",
+    planets: "planets",
+    films: "films",
+    species: "species"
+  };
+
+  const imageUrl = `https://starwars-visualguide.com/assets/img/${imageTypeMap[type]}/${id}.jpg`;
 
   return (
-    <div className="card mb-3" style={{ maxWidth: 540 }}>
-      <div className="row g-0">
-        <div className="col-md-4">
-          <img
-            src={`https://starwars-visualguide.com/assets/img/${type}/${id}.jpg`}
-            className="img-fluid rounded-start"
-            alt={entity.name}
-          />
-        </div>
-        <div className="col-md-8">
-          <div className="card-body">
-            <h1>{entity.name}</h1>
-            {type === "people" && <p>Género: {entity.gender}, Nacimiento: {entity.birth_year}</p>}
-            {type === "planets" && <p>Clima: {entity.climate}, Terreno: {entity.terrain}</p>}
-            {type === "vehicles" && <p>Modelo: {entity.model}, Fabricante: {entity.manufacturer}</p>}
+      <div className="card-single mb-3">
+        <div className="row">
+          <div className="col-md-4">
+            <img
+              src={imageUrl}
+              className="img-fluid rounded-start"
+              alt={properties.name || "Image"}
+            />
+          </div>
+          <div className="col-md-8">
+            <div className="card-body">
+              <h1>{properties.title || properties.name}</h1>
+              {type === "people" && (
+                <>
+                  <p>Género: {properties.gender}</p>
+                  <p>Nacimiento: {properties.birth_year}</p>
+                </>
+              )}
+              {type === "planets" && (
+                <>
+                  <p>Clima: {properties.climate}</p>
+                  <p>Terreno: {properties.terrain}</p>
+                </>
+              )}
+              {type === "vehicles" && (
+                <>
+                  <p>Modelo: {properties.model}</p>
+                  <p>Fabricante: {properties.manufacturer}</p>
+                </>
+              )}
+              {type === "starships" && (
+                <>
+                  <p>Modelo: {properties.model}</p>
+                  <p>Fabricante: {properties.manufacturer}</p>
+                </>
+              )}
+              {type === "films" && (
+                <>
+                  <p>Director: {properties.director}</p>
+                  <p>Productor: {properties.producer}</p>
+                  <p>Fecha de lanzamiento: {properties.release_date}</p>
+                </>
+              )}
+              {type === "species" && (
+                <>
+                  <p>Clasificación: {properties.classification}</p>
+                  <p>Designación: {properties.designation}</p>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
   );
 };

@@ -6,14 +6,14 @@ export const Home = () => {
   const { store, actions } = useContext(Context);
 
   return (
-    <div className="container">
-      <h1>Personajes</h1>
+    <div className="container justify-content-center">
+      <h1>Characters</h1>
       <div className="row">
         {store.people.map((person, index) => (
           <div key={index} className="col-md-4">
             <Card
               title={person.name}
-              description={`ID: ${person.uid}`}
+              // description={`ID: ${person.uid}`}
               image={`https://starwars-visualguide.com/assets/img/characters/${person.uid}.jpg`}
               onFavorite={() => actions.addFavorite(person)}
               onRemoveFavorite={() => actions.removeFavorite(person)}
@@ -24,7 +24,7 @@ export const Home = () => {
         ))}
       </div>
 
-      <h1>Vehículos</h1>
+      <h1>Vehicles</h1>
       <div className="row">
         {store.vehicles.map((vehicle, index) => (
           <div key={index} className="col-md-4">
@@ -42,7 +42,7 @@ export const Home = () => {
       </div>
 
     
-      <h1>Naves</h1>
+      <h1>Starships</h1>
       <div className="row">
         {store.starships.map((starship, index) => (
           <div key={index} className="col-md-4">
@@ -59,7 +59,7 @@ export const Home = () => {
         ))}
       </div>
 
-      <h1>Planetas</h1>
+      <h1>Planets</h1>
       <div className="row">
         {store.planets.map((planet, index) => (
           <div key={index} className="col-md-4">
@@ -77,7 +77,7 @@ export const Home = () => {
       </div>
 
       
-      <h1>Películas</h1>
+      <h1>Films</h1>
       <div className="row">
         {store.films.map((film, index) => (
           <div key={index} className="col-md-4">
@@ -95,7 +95,7 @@ export const Home = () => {
       </div>
 
     
-      <h1>Especies</h1>
+      <h1>Species</h1>
       <div className="row">
         {store.species.map((specie, index) => (
           <div key={index} className="col-md-4">
