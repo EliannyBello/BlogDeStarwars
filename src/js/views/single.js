@@ -1,21 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 export const Single = () => {
   const { type, id } = useParams();  
-  const { store, actions } = useContext(Context); 
+  const { store } = useContext(Context); 
 
-  useEffect(() => {
-    if (type === "people") actions.getPeople();
-    else if (type === "planets") actions.getPlanets();
-    else if (type === "vehicles") actions.getVehicles();
-    else if (type === "starships") actions.getStarships();
-    else if (type === "films") actions.getFilms();
-    else if (type === "species") actions.getSpecies();
-  }, [type, id, actions]); 
-
+ 
   const entity = store[type]?.find((item) => item.uid === id) || null;
+
 
   if (!entity || !entity.properties) {
     return <div>Loading...</div>;
@@ -23,6 +16,7 @@ export const Single = () => {
 
   const properties = entity.properties || {};
 
+  
   const imageTypeMap = {
     people: "characters",
     starships: "starships",
